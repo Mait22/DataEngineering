@@ -1,0 +1,51 @@
+version: '3.8'
+services: 
+
+  app: 
+    build: ./
+    image: testapp41
+    ports:
+      - 4040:4040
+    depends_on: 
+      - "mongo"
+      - "postgresql"
+      - "mysql"
+    environment:
+      POSTGRES_URL: "postgres://docker:password@postgres:5432/test"
+      MONGO_URL: "mongodb://mongo:27017/test"
+      PORT: "4040"
+      NODE_ENV: 'production'
+
+  mongo:
+    ports: 
+      - 27017:27017
+    volumes:
+      - ./mongodata:/data/db
+    image: mongo
+
+  postgresql:
+    image: postgres
+    ports:
+      - 5400:5432
+    volumes:
+      - ./psgdata/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./psgdata/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "docker" 
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "test"
+    restart: always
+
+  mysql:
+    image: mysql
+    ports:
+      - "3600:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testuser
+    restart: always
