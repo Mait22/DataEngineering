@@ -72,7 +72,7 @@ app.post('/userspsg', async (req, res) => {
     try {
         const resBody = req.body
         const response = await UserSQL.create({ firstName: resBody.firstName, lastName: resBody.lastName}); // builds AND saves
-        console.log(response)
+        // console.log(response)
         res.send('user created')
     } catch (err) {
         console.log(err)
@@ -92,10 +92,9 @@ app.get('/userspsg', async (req, res) => {
 
 // Run server
 const run = async () => {
-    let retriesMongo = 5;
+    let retriesMongo = 7;
     while (retriesMongo) {
         try {
-            console.log(process.env.PORT)
             await mongoose.connect(process.env.MONGO_URL, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true

@@ -3,7 +3,7 @@ services:
 
   app: 
     build: ./
-    image: testapp41
+    image: testapp42
     ports:
       - 4040:4040
     depends_on: 
@@ -15,6 +15,9 @@ services:
       MONGO_URL: "mongodb://mongo:27017/test"
       PORT: "4040"
       NODE_ENV: 'production'
+    networks:
+      - frontend
+      - backend
 
   mongo:
     ports: 
@@ -22,6 +25,8 @@ services:
     volumes:
       - ./mongodata:/data/db
     image: mongo
+    networks:
+      - backend
 
   postgresql:
     image: postgres
@@ -35,6 +40,8 @@ services:
       POSTGRES_PASSWORD: "password"
       POSTGRES_DB: "test"
     restart: always
+    networks:
+      - backend
 
   mysql:
     image: mysql
@@ -49,3 +56,9 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: testuser
     restart: always
+    networks:
+      - backend
+
+networks:
+  backend:
+  frontend:
